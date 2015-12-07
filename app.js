@@ -4,6 +4,10 @@ request = require('request'),
 cheerio = require('cheerio'),
 app = express();
 
+var listener = app.listen(3000, function() {
+  console.log("bgc-match server started on port " + listener.address().port);
+});
+
 // Logger config
 if (process.env.NODE_ENV == 'production')
   app.use(logger('short'));
@@ -15,9 +19,3 @@ app.use(express.static(__dirname + '/public'));
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
-
-var listener = app.listen(3000, function() {
-  console.log("bgc-match server started on port " + listener.address().port);
-});
-
-console.log("BAJS");
