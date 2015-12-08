@@ -56,6 +56,8 @@ background: #41ceec;
   width: 423px;
   font-size: 22px;
   display: inline-block;
+  white-space: nowrap;
+  overflow-x: hidden;
   margin-top: 15px;
   background: #f1ef00;
   border: 1px solid #ff0000;
