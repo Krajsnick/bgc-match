@@ -3,6 +3,7 @@ logger = require('morgan'),
 bodyParser = require('body-parser'),
 request = require('request'),
 cheerio = require('cheerio'),
+basicAuth = require('basic-auth'),
 app = express();
 
 var listener = app.listen(3000, function() {
@@ -15,19 +16,47 @@ if (process.env.NODE_ENV == 'production')
 else
   app.use(logger('dev'));
 
+// Basic auth
+var auth = function (req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  };
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  };
+
+  if (user.name === 'roffe' && user.pass === 'kaff3muggen') {
+    return next();
+  } else {
+    return unauthorized(res);
+  };
+};
+
 // app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json({type: 'application/json'}));
-app.use(express.static(__dirname + '/public'));
+app.use(auth, express.static(__dirname + '/public'));
 
-app.get('/', function(req, res) {
+app.get('/', auth, function(req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.post('/', function(req, res) {
-  console.log(req.body);
+app.post('/', auth, function(req, res) {
+  var response = {match: false};
 
-  var bgnr = req.body.bgnr.digitsOnly(),
-      orgnr = req.body.orgnr.digitsOnly();
+  var bgnr = req.body.bgnr,
+      orgnr = req.body.orgnr;
+
+  if (bgnr && orgnr) {
+    bgnr = bgnr.digitsOnly();
+    orgnr = orgnr.digitsOnly();
+  } else {
+    res.send(JSON.stringify(response));
+    return;
+  }
 
   var url = "http://bgc.se/sok-bg-nr/?bgnr=" + bgnr + "&orgnr=" + orgnr;
   request(url, function(error, response, html) {
@@ -44,12 +73,11 @@ app.post('/', function(req, res) {
           .find('li.subtitle:contains("Organisationsnummer")')
           .next('li').text().digitsOnly();
 
-      var response = {match: false};
       if (bgnr === resBgnr && orgnr === resOrgnr) {
         response.match = true;
       }
 
-      res.end(JSON.stringify(response));
+      res.send(JSON.stringify(response));
     }
   });
 });
