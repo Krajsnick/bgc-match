@@ -7,7 +7,7 @@ body {
 
 div#container {
   width: 720px;
-  height: 200px;
+  height: 300px;
   margin: 30px auto 0 auto;
   padding: 10px 5px 30px 5px;
 
@@ -19,6 +19,10 @@ div#container {
   text-align: center;
 }
 
+form#match {
+  margin-bottom: 20px;
+}
+
 form#match input {
   border: 2px solid #f94bec;
   background: #fa9be1;
@@ -28,8 +32,33 @@ form#match input {
   width: 150px;
 }
 
-form#match #match-submit {
-  margin-top: 25px;
+#match-submit {
+  font-weight: bold;
+  display: inline-block;
+  border: 1px solid #1380bd;
+  cursor: pointer;
+  background: #2ab7d5;
+  padding: 8px 185px;
+  -webkit-user-select: none;
+}
+
+#match-submit:hover {
+background: #41ceec;
+}
+
+#match-submit:active {
+  border: 1px inset;
+  background: #259fb9;
+}
+
+#result-view {
+  padding: 8px 0 8px 0;
+  width: 423px;
+  font-size: 22px;
+  display: inline-block;
+  margin-top: 15px;
+  background: #f1ef00;
+  border: 1px solid #ff0000;
 }
 
 .input-wrap {
