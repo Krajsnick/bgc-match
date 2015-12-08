@@ -26,19 +26,34 @@ app.get('/', function(req, res) {
 app.post('/', function(req, res) {
   console.log(req.body);
 
-  var bgnr = req.body.bgnr.replace(/[^0-9.]/g, ''),
-      orgnr = req.body.replace(/[^0-9.]/g, '');
+  var bgnr = req.body.bgnr.digitsOnly(),
+      orgnr = req.body.orgnr.digitsOnly();
 
-  matchBgOrgnr("http://bgc.se/sok-bg-nr/?bgnr=" + bgnr + "&orgnr=" + orgnr);
-
-  res.end(JSON.stringify(req.body));
-});
-
-function matchBgOrgnr(url) {
+  var url = "http://bgc.se/sok-bg-nr/?bgnr=" + bgnr + "&orgnr=" + orgnr;
   request(url, function(error, response, html) {
     if (!error) {
       var $ = cheerio.load(html);
 
+      var resBgnr = $('.result-container')
+          .first()
+          .find('li.subtitle:contains("Bankgironummer")')
+          .next('li').text().digitsOnly();
+
+      var resOrgnr = $('.result-container')
+          .first()
+          .find('li.subtitle:contains("Organisationsnummer")')
+          .next('li').text().digitsOnly();
+
+      var response = {match: false};
+      if (bgnr === resBgnr && orgnr === resOrgnr) {
+        response.match = true;
+      }
+
+      res.end(JSON.stringify(response));
     }
   });
+});
+
+String.prototype.digitsOnly = function() {
+  return this.replace(/[^0-9.]/g, '');
 }

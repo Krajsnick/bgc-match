@@ -22,18 +22,25 @@ $(document).ready(function(){
         contentType: 'application/json; charset=utf-8',
         success: dataFetched
       });
-    } else {
-      isFetching = false;
-      stopLoadingSpin();
     }
   });
 
   function dataFetched(result) {
-    console.log("Fetched data");
+    isFetching = false;
+    stopLoadingSpin();
+
+    if (result.match) {
+      $resultView.css('color', '#21bf03');
+      $resultView.text('MATCH');
+    } else {
+      $resultView.css('color', '#db0707');
+      $resultView.text('NO MATCH');
+    }
   }
 
   function startLoadingSpin() {
     $resultView.text('-');
+    $resultView.css('color', '#000');
     intervalID = setInterval(function() {
       var tmpText = $resultView.text();
       tmpText = tmpText + " - -";
