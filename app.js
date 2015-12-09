@@ -20,7 +20,7 @@ else
 var auth = function (req, res, next) {
   function unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    return res.send(401);
+    return res.sendStatus(401);
   };
 
   var user = basicAuth(req);
@@ -45,16 +45,13 @@ app.get('/', auth, function(req, res) {
 });
 
 app.post('/', auth, function(req, res) {
-  var response = {match: false};
+  var result = {match: false};
 
-  var bgnr = req.body.bgnr,
-      orgnr = req.body.orgnr;
-
-  if (bgnr && orgnr) {
-    bgnr = bgnr.digitsOnly();
-    orgnr = orgnr.digitsOnly();
+  if (req.body.bgnr && req.body.orgnr) {
+    var bgnr = req.body.bgnr.digitsOnly();
+    var orgnr = req.body.orgnr.digitsOnly();
   } else {
-    res.send(JSON.stringify(response));
+    res.json(result);
     return;
   }
 
@@ -74,10 +71,10 @@ app.post('/', auth, function(req, res) {
           .next('li').text().digitsOnly();
 
       if (bgnr === resBgnr && orgnr === resOrgnr) {
-        response.match = true;
+        result.match = true;
       }
 
-      res.send(JSON.stringify(response));
+      res.json(result);
     }
   });
 });
