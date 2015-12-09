@@ -25,7 +25,7 @@ $(document).ready(function(){
     }
   });
 
-  $('#bgnr-input, #orgnr-input').keyup(function(e) {
+  $('#bg-input, #orgnr-input').keyup(function(e) {
     if (e.which == 13) $matchBtn.click();
   })
 
