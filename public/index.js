@@ -25,6 +25,10 @@ $(document).ready(function(){
     }
   });
 
+  $('#bgnr-input, #orgnr-input').keyup(function(e) {
+    if (e.which == 13) $matchBtn.click();
+  })
+
   function dataFetched(result) {
     isFetching = false;
     stopLoadingSpin();
