@@ -55,7 +55,7 @@ app.post('/', auth, function(req, res) {
     return;
   }
 
-  var url = "http://bgc.se/sok-bg-nr/?bgnr=" + bgnr + "&orgnr=" + orgnr;
+  var url = "http://bgc.se/sok-bankgironummer/?bgnr=" + bgnr + "&orgnr=" + orgnr;
   request(url, function(error, response, html) {
     if (!error) {
       var $ = cheerio.load(html);
