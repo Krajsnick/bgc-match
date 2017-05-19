@@ -38,8 +38,7 @@ var auth = function (req, res, next) {
   };
 };
 
-// app.use(bodyParser.urlencoded({extended: true}));
-app.use(bodyParser.json({type: 'application/json'}));
+app.use(bodyParser.json());
 app.use(auth, express.static(__dirname + '/public'));
 
 app.post('/', auth, function(req, res) {
