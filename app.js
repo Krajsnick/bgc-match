@@ -8,7 +8,7 @@ app = express();
 
 const port = process.env.PORT || 3000;
 
-app.listen(3000, function() {
+app.listen(port, function() {
   console.log(`bgc-match server started on port ${port}`);
 });
 
