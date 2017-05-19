@@ -42,10 +42,6 @@ var auth = function (req, res, next) {
 app.use(bodyParser.json({type: 'application/json'}));
 app.use(auth, express.static(__dirname + '/public'));
 
-app.get('/', auth, function(req, res) {
-  res.sendFile(__dirname + '/public/index.html');
-});
-
 app.post('/', auth, function(req, res) {
   var result = {match: false};
 
