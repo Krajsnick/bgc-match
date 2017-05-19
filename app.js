@@ -6,13 +6,15 @@ cheerio = require('cheerio'),
 basicAuth = require('basic-auth'),
 app = express();
 
-var listener = app.listen(3000, function() {
-  console.log("bgc-match server started on port " + listener.address().port);
+const port = process.env.PORT || 3000;
+
+app.listen(3000, function() {
+  console.log(`bgc-match server started on port ${port}`);
 });
 
 // Logger config
 if (process.env.NODE_ENV == 'production')
-  app.use(logger('short'));
+  app.use(logger('combined'));
 else
   app.use(logger('dev'));
 
